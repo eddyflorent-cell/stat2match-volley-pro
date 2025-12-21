@@ -249,8 +249,8 @@ gap: 6px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      gap: 8px;
-      min-height: 320px;
+      gap: 2px;
+      min-height: 0;
       font-size: 12px;
       color: #fff;
       cursor: default;
@@ -271,7 +271,7 @@ gap: 6px;
     }
     .pos-select {
       width: 100%;
-      margin-top: 4px;
+      margin-top: 2px;
       font-size: 12px;
       padding: 2px 4px;
       cursor: pointer;
@@ -279,7 +279,7 @@ gap: 6px;
       border: none;
     }
     .pos-jersey {
-      margin-top: 6px;
+      margin-top: 2px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -287,10 +287,10 @@ gap: 6px;
       border-radius: 8px;
       font-size: 12px;
       text-align: center;
-      padding: 4px;
+      padding: 2px 3px;
       color: #fff;
       pointer-events: none;
-      min-height: 34px;
+      min-height: 0;
     }
     
     .pos-jersey .name{font-weight:700;font-size:13px;line-height:1.15;}
@@ -545,9 +545,9 @@ gap: 6px;
 .pro-action-pad{
   display:flex;
   flex-direction:column;
-  gap:6px;
-  margin-top:8px;
-  padding-top:8px;
+  gap:3px;
+  margin-top:2px;
+  padding-top:2px;
   border-top: 1px solid rgba(255,255,255,0.10);
 }
 .pro-skill-row{
@@ -574,7 +574,53 @@ gap: 6px;
   font-size: 12px;
   cursor: pointer;
 }
+
+/* Feedback immédiat au toucher (desktop + mobile) */
+.pro-out-btn.pressed{
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.45) !important;
+  transform: translateY(1px);
+}
+.pro-out-btn:active{
+  filter: brightness(1.12);
+}
+
 .pro-out-btn:hover{ background: rgba(255,255,255,0.10); }
+
+.pro-out-btn.tapped{
+  background: rgba(0,230,118,0.22);
+  border-color: rgba(0,230,118,0.75) !important;
+  box-shadow: 0 0 0 2px rgba(0,230,118,0.18) inset;
+}
+.pro-out-btn.undone{
+  background: rgba(255,193,7,0.22);
+  border-color: rgba(255,193,7,0.80) !important;
+  box-shadow: 0 0 0 2px rgba(255,193,7,0.18) inset;
+}
+
+#tiny-toast{
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.72);
+  color: #fff;
+  font-size: 12px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+#tiny-toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce){
+  #tiny-toast{ transition:none; }
+}
+
 .pro-out-btn[data-outcome="plus"]{ border-color: rgba(0,230,118,0.35); }
 .pro-out-btn[data-outcome="minus"]{ border-color: rgba(255,82,82,0.35); }
 .pro-out-btn[data-outcome="point"]{ border-color: rgba(64,196,255,0.35); }
@@ -778,6 +824,8 @@ gap: 6px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   margin-bottom: 12px;
+
+  overflow-x: hidden;
 }
 
 
@@ -805,6 +853,100 @@ gap: 6px;
       border-top: 1px solid #444;
       padding-top: 6px;
     }
+
+    
+    /* --- Toggle d'affichage des panneaux adverses (plié/déplié) --- */
+    .opp-headbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .opp-toggle{
+      font-size:12.5px;
+      padding:7px 11px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .opp-toggle.is-open{
+      filter: brightness(1.06);
+    }
+    .opp-panels-wrap{ margin-top:8px; }
+    .opp-panels-wrap.is-collapsed{ display:none; }
+
+/* --- Point adverse (niveau 1 + niveau 2) : panneau rapide au-dessus des stats adverses --- */
+    .opp-point-panel{
+      margin: 10px 0 12px;
+      padding: 10px 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(236,79,33,.14), rgba(73,146,219,.10), rgba(158,206,9,.08));
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+
+    /* --- Fautes adverses directes (point pour nous) : panneau rapide --- */
+    .opp-fault-panel{
+      background: linear-gradient(135deg, rgba(158,206,9,.14), rgba(244,154,30,.10), rgba(73,146,219,.08));
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .opp-fault-panel .opp-point-title{ color: rgba(255,255,255,.98); }
+    .opp-point-head{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .opp-point-title{ font-weight:800; letter-spacing:.2px; }
+    .opp-point-sub{ opacity:.9; font-size: 12.5px; }
+    .opp-point-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .opp-point-score{
+      display:flex; align-items:center; gap:10px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .opppt-team{ font-weight:800; opacity:.95; }
+    .opppt-btn{
+      width: 44px; height: 44px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      color: #fff;
+      background: rgba(0,0,0,.28);
+      font-size: 20px;
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .08s ease, filter .08s ease, background .12s ease;
+    }
+    .opppt-btn:active{ transform: scale(.96); filter: brightness(1.15); }
+    .opppt-btn.minus{ background: rgba(255, 64, 64, .28); }
+    .opppt-btn.plus{ background: rgba(0, 200, 120, .26); }
+    #opppt-score-val{
+      min-width: 46px;
+      text-align:center;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+    .opppt-tags{
+      display:flex; align-items:center; gap:8px;
+      flex-wrap:wrap;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .opppt-tag{
+      border-radius: 999px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.26);
+      color:#fff;
+      cursor:pointer;
+      font-weight:700;
+      font-size: 13px;
+      transition: transform .08s ease, filter .08s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .opppt-tag:active{ transform: scale(.97); filter: brightness(1.15); }
+    .opppt-tag small{ opacity:.8; font-weight:600; }
+
     .stat-row {
       display: flex;
       justify-content: space-between;
@@ -828,6 +970,16 @@ gap: 6px;
       font-size: 20px;
       cursor: pointer;
     }
+
+@media (max-width: 600px){
+  /* Page stats joueuse : évite le tronquage horizontal */
+  .stat-row{flex-wrap: wrap; align-items: flex-start;}
+  .stat-label{flex: 1 1 100%;}
+  .stat-controls{flex-wrap: wrap; justify-content: flex-end;}
+  .stat-controls button{width: 30px; height: 30px; font-size: 18px;}
+  .btn-stat-point, .btn-stat-fault{ padding: 4px 8px; font-size: 14px; }
+}
+
     .btn-stat-minus {
       background: #e53935;
       color: #fff;
@@ -1872,6 +2024,89 @@ body{
 /* Temps morts : on retire toute trace de TM tech. (si jamais il restait dans un vieux cache) */
 .tm-inline-tech{ display:none !important; }
 
+
+/* === Floating "Retour au terrain" (toujours visible sur les pages annexes) === */
+.floating-back-wrap{
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none; /* container doesn't block; buttons re-enable */
+}
+.floating-back-wrap.left{ left: 10px; }
+.floating-back-wrap.right{ right: 10px; }
+
+.floating-back-btn{
+  pointer-events: auto;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  opacity: .95;
+}
+.floating-back-btn:hover{ opacity: 1; }
+.floating-back-btn:active{ transform: scale(.98); }
+
+@media (max-width: 520px){
+  .floating-back-wrap.left{ left: 6px; }
+  .floating-back-wrap.right{ right: 6px; }
+  .floating-back-btn{
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+}
+.floating-back-hidden{ display:none !important; }
+
+
+/* --- Indicateur Mode Rallye (visible, non bloquant) --- */
+#rally-indicator-fixed{
+  position: fixed;
+  top: 76px;
+  right: 14px;
+  z-index: 9998;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: .3px;
+  border: 1px solid rgba(0,230,118,.35);
+  background: rgba(0,0,0,.55);
+  color: rgba(255,255,255,.92);
+  box-shadow: 0 12px 34px rgba(0,0,0,.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none; /* never block clicks */
+}
+#rally-indicator-fixed .dot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  background: rgba(0,230,118,.35);
+  box-shadow: 0 0 0 3px rgba(0,230,118,.12);
+}
+#rally-indicator-fixed.on{
+  display: inline-flex;
+  border-color: rgba(0,230,118,.65);
+}
+#rally-indicator-fixed.on .dot{
+  background: rgba(0,230,118,.95);
+  box-shadow: 0 0 0 4px rgba(0,230,118,.18);
+}
+
 </style>
 </head>
 <body>
@@ -2449,7 +2684,16 @@ body{
 
   <select id="select-libero-pro" style="min-width:220px;"></select>
 
-  <span id="libero-active-badge" class="pro-badge" style="display:none;">Libéro sur le terrain</span>
+  
+
+  <div class="pro-libero-map" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+    <span style="font-size:12px; opacity:.85;">Libéro remplace :</span>
+    <select id="select-libero-target-1" style="min-width:220px;"></select>
+    <select id="select-libero-target-2" style="min-width:220px;"></select>
+    <span style="font-size:11px; opacity:.75;">(priorité au choix #1)</span>
+  </div>
+
+<span id="libero-active-badge" class="pro-badge" style="display:none;">Libéro sur le terrain</span>
 </div>
 
 <!-- TEMPS MORTS – VERSION COMPACTE -->
@@ -2475,7 +2719,74 @@ body{
 
     <!-- STATS ADVERSAIRES -->
     <section id="opponent" class="no-select">
-      <h2 id="opponent-title">Stats adversaires <span id="opponent-set-label">(set 1)</span></h2>
+      <div class="opp-headbar">
+        <h2 id="opponent-title">Stats adversaires <span id="opponent-set-label">(set 1)</span></h2>
+        <button type="button" id="btn-toggle-opp-panels" class="btn chip-btn opp-toggle" aria-expanded="false" aria-controls="opp-panels-wrap" title="Afficher / masquer le panneau points & fautes adverses">⚡ Détails</button>
+      </div>
+
+      <div id="opp-panels-wrap" class="opp-panels-wrap is-collapsed" aria-hidden="true">
+
+
+      <div id="opp-point-panel" class="opp-point-panel">
+        <div class="opp-point-head">
+          <div class="opp-point-title">🔥 Point adverse (sans “faute” chez nous)</div>
+          <div class="opp-point-sub">Niveau 1 = juste le score · Niveau 2 = score + tag (service / attaque / bloc / autre)</div>
+        </div>
+
+        <div class="opp-point-row">
+          <div class="opp-point-score" aria-label="Contrôle rapide du score adverse">
+            <span class="opppt-team" id="opppt-team">Adversaire</span>
+            <button type="button" class="opppt-btn minus" data-opppt="minus" aria-label="Retirer 1 point adverse (correction)">−</button>
+            <span id="opppt-score-val" aria-live="polite">0</span>
+            <button type="button" class="opppt-btn plus" data-opppt="plus" aria-label="Ajouter 1 point adverse (neutre)">+</button>
+          </div>
+
+          <div class="opppt-tags" aria-label="Niveau 2 : tag du point adverse (spectaculaire)">
+            <button type="button" class="opppt-tag" data-opppt-tag="service">🚀 Service <small>(+1)</small></button>
+            <button type="button" class="opppt-tag" data-opppt-tag="attaque">🎯 Attaque <small>(+1)</small></button>
+            <button type="button" class="opppt-tag" data-opppt-tag="bloc">🧱 Bloc <small>(+1)</small></button>
+            <button type="button" class="opppt-tag" data-opppt-tag="autre">✨ Autre <small>(+1)</small></button>
+          </div>
+        </div>
+
+        <div style="margin-top:8px; font-size:12.5px; opacity:.95;">
+          Astuce : tu peux utiliser ça quand <b>l’adversaire marque “tout seul”</b> (sans erreur flagrante chez nous).
+          Ça met le score à jour et garde la logique de service/rotation.
+        </div>
+      
+      
+      </div>
+      <!-- /opp-point-panel -->
+
+      <div id="opp-fault-panel" class="opp-point-panel opp-fault-panel">
+        <div class="opp-point-head">
+          <div class="opp-point-title">🎁 Fautes adverses directes (point pour nous)</div>
+          <div class="opp-point-sub">Quand <b>l’adversaire se rate</b> (service dehors, attaque dehors, filet, etc.) et que tu veux juste noter <b>un point pour nous</b> sans attribuer une action chez nous.</div>
+        </div>
+
+        <div class="opp-point-row">
+          <div class="opp-point-score" aria-label="Contrôle rapide du score pour nous (fautes adverses)">
+            <span class="opppt-team" id="oppft-team">Nous</span>
+            <button type="button" class="opppt-btn minus" data-oppft="minus" aria-label="Retirer 1 point pour nous (correction)">−</button>
+            <span id="oppft-score-val" aria-live="polite">0</span>
+            <button type="button" class="opppt-btn plus" data-oppft="plus" aria-label="Ajouter 1 point pour nous (neutre)">+</button>
+          </div>
+
+          <div class="opppt-tags" aria-label="Tag de la faute adverse (point pour nous)">
+            <button type="button" class="opppt-tag" data-oppft-tag="service">🚫 Service <small>(+1 • <span data-oppft-count="service">0</span>)</small></button>
+            <button type="button" class="opppt-tag" data-oppft-tag="attaque">🎯 Attaque <small>(+1 • <span data-oppft-count="attaque">0</span>)</small></button>
+            <button type="button" class="opppt-tag" data-oppft-tag="bloc">🧱 Bloc <small>(+1 • <span data-oppft-count="bloc">0</span>)</small></button>
+            <button type="button" class="opppt-tag" data-oppft-tag="autre">✨ Autre <small>(+1 • <span data-oppft-count="autre">0</span>)</small></button>
+          </div>
+        </div>
+
+        <div style="margin-top:8px; font-size:12.5px; opacity:.95;">
+          Astuce : si tu es en <b>réception</b> et que tu cliques ici → c’est un <b>side‑out</b> (on récupère le service) → <b>ça tourne</b> automatiquement (si rotation auto activée).
+        </div>
+      </div>
+
+</div>
+
       <div id="opponent-stats-list">
         <div class="stat-row" data-ocat="service">
           <div class="stat-label">Services</div>
@@ -2514,12 +2825,15 @@ body{
           </div>
         </div>
       </div>
-    </section>
+    
+      </div>
+      <!-- /opp-panels-wrap -->
+</section>
   </div>
   <!-- FICHE STATS JOUEUSE -->
   <div class="container" id="stats-container" style="display:none;">
     <section id="stats-view" class="no-select">
-      <button id="btn-back">← Retour au terrain</button>
+<p style="margin:10px 0 0; opacity:.95;">🧲 <b>Nouveau :</b> utilise les boutons flottants <b>Terrain ↩</b> (gauche + droite) : ils restent visibles même quand tu scroll, sur Stats / Tableau de bord / Historique / Tutoriel.</p>
       <h2 id="stats-player-title">Statistiques :</h2>
 
       <div class="stats-hero">
@@ -2686,8 +3000,7 @@ body{
    <!-- TABLEAU DE BORD -->
   <div class="container" id="dashboard-container" style="display:none;">
     <section id="dashboard" class="no-select">
-      <button id="btn-back-from-dashboard">← Retour au terrain</button>
-      <h2>Tableau de bord</h2>
+<h2>Tableau de bord</h2>
       <div id="dash-actions">
         <button id="btn-dashboard-print" class="btn-dash">Imprimer / PDF</button>
         <button id="btn-dashboard-share" class="btn-dash">Partager</button>
@@ -2867,84 +3180,133 @@ body{
   <!-- HISTORIQUE -->
   <div class="container" id="history-container" style="display:none;">
     <section id="history" class="no-select">
-      <button id="btn-back-from-history">← Retour au terrain</button>
-      <h2>Historique des matchs</h2>
+<h2>Historique des matchs</h2>
 
       <div id="history-list"></div>
-
-      <!-- Bouton retour en bas de la page aussi -->
-      <button id="btn-back-from-history-bottom" style="margin-top:8px;">
-        ← Retour au terrain
-      </button>
-    </section>
+</section>
   </div>
     <!-- TUTORIEL / AIDE -->
   <div class="container" id="help-container" style="display:none;">
-    <section id="help" class="no-select help-page">
-      <button class="help-back" id="btn-back-from-help">← Retour au terrain</button>
-      <h2 style="margin:10px 0 6px;">Tutoriel Funky — Stats de match pro (6×6) 🪩🏐</h2>
+    
+<section id="help" class="no-select help-page">
+  <h2 style="margin:10px 0 6px;">Tutoriel — Stat2Match Pro (6×6) 🏐</h2>
+  <p class="help-tip" style="margin:8px 0 0;">
+    Objectif : <strong>cliquer vite</strong> sur la bonne tuile, sans douter, et garder un match propre (score, rotations, libéro, stats).
+    <br><em>Astuce match :</em> sur toutes les pages, les boutons flottants <strong>↩ Terrain</strong> restent visibles sur les côtés.
+  </p>
 
-      <div class="help-rule" style="margin-top:10px;">
-        <h3>🚀 Démarrage en 30 secondes</h3>
-        <ol style="margin:8px 0 0;padding-left:18px;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.5;">
-          <li>Choisis tes <strong>joueur·euses</strong> dans l’effectif puis valide le <strong>match</strong>.</li>
-          <li>Assigne les 6 postes sur le <strong>terrain</strong> (AG/AC/AD/ARG/ARC/ARD).</li>
-          <li>Tu notes <strong>tout sur la tuile</strong> du poste : <code>+</code>/<code>−</code>/<code>P</code>/<code>F</code>.</li>
-          <li>Le score bouge <strong>uniquement</strong> sur <code>P</code> (point pour nous) ou <code>F</code> (faute de nous = point pour eux).</li>
-        </ol>
-        <p style="margin:10px 0 0;color:rgba(255,255,255,0.82);font-size:13px;line-height:1.45;">
-          ℹ️ Les <strong>temps morts techniques</strong> ne sont pas gérés dans cette version (supprimés). On garde seulement <strong>Temps morts nous</strong> / <strong>Temps morts eux</strong>.
-        </p>
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🚀 Démarrage en 45 secondes (même si tu es néophyte)</h3>
+    <ol style="margin:8px 0 0;padding-left:18px;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      <li>Va dans <strong>Effectif</strong> → ajoute tes joueur·euses → <strong>Valider le match</strong>.</li>
+      <li>Sur le <strong>Terrain</strong>, affecte les 6 postes : <strong>AG / AC / AD / ARG / ARC / ARD</strong>.</li>
+      <li>Choisis qui sert : section <strong>Service : Nous / Eux</strong>.</li>
+      <li>Optionnel : coche <strong>Rotation auto (side-out)</strong> (recommandé).</li>
+      <li>Optionnel : coche <strong>Libéro auto</strong>, puis choisis le/la <strong>libéro</strong> et qui il/elle <strong>remplace</strong>.</li>
+    </ol>
+  </div>
+
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🧱 Comprendre une tuile joueur·euse (c’est LE cœur)</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Sur chaque poste du terrain, tu as 7 rubriques :
+      <strong>Srv</strong> (service), <strong>Rec</strong> (réception), <strong>Pas</strong> (passe),
+      <strong>Att</strong> (attaque), <strong>Blo</strong> (bloc), <strong>Def</strong> (défense), <strong>Rel</strong> (relance).
+      <br>Chaque rubrique a 4 états :
+      <span class="kbd">+</span> = action propre / utile,
+      <span class="kbd">−</span> = action moyenne / subie,
+      <span class="kbd">P</span> = <strong>Point pour nous</strong>,
+      <span class="kbd">F</span> = <strong>Faute de nous</strong> (point pour eux).
+    </p>
+
+    <div class="help-grid">
+      <div class="help-card">
+        <h4>✅ Exemple simple</h4>
+        <p>Notre #12 attaque bien mais le rallye continue → clique <strong>Att +</strong> sur sa tuile.</p>
       </div>
-
-
-      <div class="help-rule">
-        <h3>1) Saisie “pro” sur les tuiles du terrain</h3>
-        <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
-          Sur <strong>chaque tuile</strong> (poste), tu as 7 lignes :
-          <span class="accent">Srv</span>, <span class="accent">Rec</span>, <span class="accent">Pas</span>,
-          <span class="accent">Att</span>, <span class="accent">Blo</span>, <span class="accent">Def</span>,
-          <span class="accent">Rel</span>.
-          Pour chaque ligne : <code>+</code> / <code>−</code> / <code>P</code> / <code>F</code>.
-        </p>
-        <ul style="margin:10px 0 0;padding-left:18px;color:rgba(255,255,255,0.84);font-size:13px;line-height:1.45;">
-          <li><code>+</code> / <code>−</code> = qualité (ne change pas le score)</li>
-          <li><code>P</code> = point pour <strong>nous</strong> (score +1)</li>
-          <li><code>F</code> = faute de <strong>nous</strong> (point pour eux)</li>
-        </ul>
+      <div class="help-card">
+        <h4>🎯 Point / faute</h4>
+        <p>Si l’action <em>termine</em> l’échange : clique <strong>P</strong> (point nous) ou <strong>F</strong> (faute nous).</p>
       </div>
-
-      <div class="help-rule" style="margin-top:12px;">
-        <h3>2) Service, side-out et rotation automatique</h3>
-        <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
-          Indique qui a le service (boutons <strong>Service : Nous / Eux</strong>).
-          Si <strong>Rotation auto (side-out)</strong> est activé :
-        </p>
-        <ul style="margin:10px 0 0;padding-left:18px;color:rgba(255,255,255,0.84);font-size:13px;line-height:1.45;">
-          <li>Si on était <strong>en réception</strong> (service = eux) et tu mets <code>P</code> → on récupère le service → <strong>on tourne</strong>.</li>
-          <li>Si on était <strong>au service</strong> (service = nous) et tu mets <code>F</code> → on perd le service (pas de rotation côté nous).</li>
-        </ul>
+      <div class="help-card">
+        <h4>👀 Feedback visuel</h4>
+        <p>À chaque clic, le bouton <strong>flash</strong> (tu vois que c’est pris). À l’annulation, ça flash aussi.</p>
       </div>
+    </div>
+  </div>
 
-      <div class="help-rule" style="margin-top:12px;">
-        <h3>3) Libéro automatique (central ⇄ libéro)</h3>
-        <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
-          Active <strong>Libéro auto</strong> et choisis la/le libéro du match.
-          Logique : le/la libéro remplace un(e) central(e) en ligne arrière, et sort automatiquement en ligne avant.
-        </p>
-      </div>
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>↩️ Annuler une erreur (super important en match)</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Tu t’es trompé·e (mauvaise tuile / mauvais bouton) ?
+      <br><strong>Appui long 2 secondes</strong> sur le <em>même</em> bouton = <strong>−1</strong> sur cette action.
+      <br>Tu entends un <strong>bip</strong> : c’est annulé.
+      <br><em>Tu as cliqué 2 fois par erreur ?</em> Fais 2 appuis longs → ça retire 2.
+    </p>
+  </div>
 
-      <div class="help-rule" style="margin-top:12px;">
-        <h3>4) Mode rallye : optionnel</h3>
-        <p style="margin:0;color:rgba(255,255,255,0.86);font-size:13px;line-height:1.45;">
-          Le mode rallye est <strong>facultatif</strong>. S’il n’est pas activé, tu peux scorer uniquement avec <code>P</code> / <code>F</code>.
-        </p>
-      </div>
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🔁 Rotation auto (side-out)</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Quand <strong>Rotation auto</strong> est activée :
+      <br>• Si on gagne un point alors qu’on <strong>était en réception</strong> → on récupère le service → <strong>ça tourne</strong>.
+      <br>• Si on gagne un point alors qu’on <strong>servait déjà</strong> → <strong>pas de rotation</strong>.
+      <br><span style="opacity:.8;">(L’équipe adverse qui tourne n’est pas simulée, on gère notre côté pour le staff.)</span>
+    </p>
+  </div>
 
-      <div class="help-footer" style="margin-top:12px;">
-        Astuce : si tu veux aller plus vite, commence par maîtriser <code>P</code>/<code>F</code>, puis ajoute <code>+</code>/<code>−</code>.
-      </div>
-    </section>
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🦸 Libéro auto (et choix de qui il/elle remplace)</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Active <strong>Libéro auto</strong>, puis :
+      <br>1) Choisis le/la <strong>Libéro</strong>
+      <br>2) Choisis qui il/elle <strong>remplace</strong> (1 ou 2 joueur·euses). Priorité au choix #1.
+      <br>Le libéro <strong>entre en ligne arrière</strong> et <strong>sort automatiquement</strong> quand il/elle arrive en <strong>ligne avant</strong>.
+      <br><span style="opacity:.85;">Par défaut, l’app évite de mettre le libéro en position de service (ARD) quand “Nous” servons.</span>
+      <br>Quand il/elle est sur le terrain, tu vois le badge : <strong>“Libéro sur le terrain • remplace …”</strong>.
+    </p>
+  </div>
+
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🎛️ Mode rallye : à quoi ça sert ?</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Le mode rallye est <strong>optionnel</strong>.
+      <br>Si tu préfères : tu peux tout saisir <strong>directement sur les tuiles</strong>.
+      <br>Le rallye sert surtout à une saisie <strong>guidée</strong> et plus “analytique” (quand tu veux reconstruire les échanges).
+    </p>
+  </div>
+
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>⏱️ Score & temps morts</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      • Le score bouge automatiquement sur <span class="kbd">P</span> et <span class="kbd">F</span>.
+      <br>• Les <strong>temps morts</strong> se gèrent “Nous” / “Eux” (0/2).
+    </p>
+  </div>
+
+  <div class="help-footer">
+    <p style="margin:0;color:rgba(255,255,255,0.78);font-size:12px;line-height:1.5;">
+      🪩 Pro tip : en match, garde l’œil sur le terrain — et utilise les boutons flottants <strong>↩ Terrain</strong> pour revenir instantanément, sans scroll.
+    </p>
+  </div>
+
+  <div class="help-rule" style="margin-top:12px;">
+    <h3>🔥 Points “Eux” & 🎁 Fautes adverses directes (sans te prendre la tête)</h3>
+    <p style="margin:6px 0 0;color:rgba(255,255,255,0.90);font-size:13px;line-height:1.55;">
+      Dans <strong>Stats adversaires</strong>, tu as maintenant 2 panneaux rapides (clique sur <strong>⚡ Détails</strong> à droite du titre pour afficher/masquer) :
+      <br><br><strong>1) 🔥 Point adverse (sans “faute” chez nous)</strong> :
+      <br>• À utiliser quand <em>l’adversaire marque proprement</em> (attaque gagnante, ace, bloc…) et que tu ne veux pas “inventer” une faute chez nous.
+      <br>• <strong>+ / −</strong> = juste corriger le score adverse.
+      <br>• Boutons <strong>Service / Attaque / Bloc / Autre</strong> = score adverse + un “tag” (utile pour le bilan).
+      <br><br><strong>2) 🎁 Fautes adverses directes (point pour nous)</strong> :
+      <br>• À utiliser quand <em>l’adversaire donne le point</em> (service dehors, attaque dehors, filet…).
+      <br>• Boutons <strong>Service / Attaque / Bloc / Autre</strong> = <strong>+1 pour nous</strong> + détail enregistré.
+      <br><br><strong>Rotation :</strong> on tourne uniquement quand on <strong>récupère le service</strong> (side‑out) : donc si on était en <strong>réception</strong> et qu’on gagne le point (que ce soit via nos actions ou via une faute adverse), <strong>ça tourne</strong>.
+    </p>
+  </div>
+
+</section>
+
   </div>
 
  </div>
@@ -2961,6 +3323,7 @@ const COURT_KEY    = "stat2matchpro-6x6-court";
 const PRO_KEY      = "stat2matchpro-6x6-prostate";
     
 
+const POINTUNDO_KEY = "stat2matchpro-6x6-pointundo";
     const DEFAULT_OUR_TEAM_NAME = "Stats de match pro – 6x6";
     const DEFAULT_US_LABEL      = "Nous";
     const DEFAULT_OPP_LABEL     = "Adversaire";
@@ -3149,9 +3512,21 @@ function applyMatchSnapshot(snap) {
     proState.autoRotate = (ps.autoRotate !== false);
     proState.autoLibero = (ps.autoLibero !== false);
     proState.showRallyBar = !!ps.showRallyBar;
+
     proState.liberoId = ps.liberoId || "";
     proState.liberoActive = !!ps.liberoActive;
-    proState.liberoCentralId = ps.liberoCentralId || "";
+
+    if (Array.isArray(ps.liberoTargetIds)) {
+      proState.liberoTargetIds = [ (ps.liberoTargetIds[0] || ""), (ps.liberoTargetIds[1] || "") ];
+    }
+
+    proState.liberoReplacedId = ps.liberoReplacedId || "";
+    proState.liberoReplacedPos = ps.liberoReplacedPos || "";
+
+    // Migration ancienne version (liberoCentralId)
+    if (!proState.liberoReplacedId && ps.liberoCentralId) {
+      proState.liberoReplacedId = String(ps.liberoCentralId || "");
+    }
   }
 
   // Persist
@@ -3315,10 +3690,18 @@ let proState = {
   serveTeam: "nous",     // "nous" | "eux"
   autoRotate: true,
   autoLibero: true,
-  showRallyBar: false,  // bandeau rallye (facultatif)
+  showRallyBar: false,   // bandeau rallye (facultatif)
+
   liberoId: "",          // playerId
   liberoActive: false,
-  liberoCentralId: ""    // central remplacé
+
+  // Qui le libéro remplace (1 ou 2 joueur·euses au choix).
+  // Si vide : fallback = tous les "centraux" détectés par le rôle.
+  liberoTargetIds: ["", ""],
+
+  // Mémoire : qui le libéro remplace actuellement (pour ressortir au bon moment)
+  liberoReplacedId: "",
+  liberoReplacedPos: ""
 };
 
 function loadProState() {
@@ -3326,19 +3709,212 @@ function loadProState() {
     const raw = localStorage.getItem(PRO_KEY);
     if (!raw) return;
     const s = JSON.parse(raw) || {};
+
     proState.serveTeam = (s.serveTeam === "eux") ? "eux" : "nous";
     proState.autoRotate = (s.autoRotate !== false);
     proState.autoLibero = (s.autoLibero !== false);
     proState.showRallyBar = !!s.showRallyBar;
+
     proState.liberoId = s.liberoId || "";
     proState.liberoActive = !!s.liberoActive;
-    proState.liberoCentralId = s.liberoCentralId || "";
+
+    // Nouveaux champs (v17+)
+    if (Array.isArray(s.liberoTargetIds)) {
+      proState.liberoTargetIds = [
+        (s.liberoTargetIds[0] || ""),
+        (s.liberoTargetIds[1] || "")
+      ];
+    }
+
+    proState.liberoReplacedId = s.liberoReplacedId || "";
+    proState.liberoReplacedPos = s.liberoReplacedPos || "";
+
+    // Migration ancienne version (liberoCentralId)
+    if (!proState.liberoReplacedId && s.liberoCentralId) {
+      proState.liberoReplacedId = String(s.liberoCentralId || "");
+    }
   } catch (e) {}
 }
 
 function saveProState() {
   try { localStorage.setItem(PRO_KEY, JSON.stringify(proState)); } catch (e) {}
 }
+
+
+/* ===== Annulation (appui long) + feedback visuel/sonore ===== */
+let pointUndoStack = {}; // { setNumber: [ {team, meta, score, proState, court} ] }
+
+function loadPointUndoStack(){
+  try{
+    const raw = localStorage.getItem(POINTUNDO_KEY);
+    if(!raw) return;
+    pointUndoStack = JSON.parse(raw) || {};
+  }catch(e){}
+}
+function savePointUndoStack(){
+  try{ localStorage.setItem(POINTUNDO_KEY, JSON.stringify(pointUndoStack || {})); }catch(e){}
+}
+
+function ensureTinyToast(){
+  let el = document.getElementById("tiny-toast");
+  if(el) return el;
+  el = document.createElement("div");
+  el.id = "tiny-toast";
+  document.body.appendChild(el);
+  return el;
+}
+let __toastTimer = null;
+function showTinyToast(msg, ms){
+  const el = ensureTinyToast();
+  el.textContent = msg || "";
+  el.classList.add("show");
+  clearTimeout(__toastTimer);
+  __toastTimer = setTimeout(()=>{ el.classList.remove("show"); }, ms || 900);
+}
+
+let __audioCtx = null;
+function beep(freq, ms){
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if(!AudioCtx) return;
+    if(!__audioCtx) __audioCtx = new AudioCtx();
+    const ctx = __audioCtx;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = "sine";
+    o.frequency.value = freq || 660;
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + (ms||120)/1000);
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    o.stop(ctx.currentTime + (ms||120)/1000 + 0.02);
+  }catch(e){}
+}
+function vib(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms||30); }catch(e){} }
+
+function flashBtn(btn, kind){
+  if(!btn) return;
+  const cls = (kind === "undo") ? "undone" : "tapped";
+  btn.classList.add(cls);
+  setTimeout(()=>btn.classList.remove(cls), 180);
+}
+
+function restoreCourtAssignments(map){
+  if(!map) return;
+  document.querySelectorAll(".court-pos").forEach(posDiv=>{
+    const key = posDiv.dataset.pos || "";
+    const select = posDiv.querySelector(".pos-select");
+    if(!select) return;
+    if(Object.prototype.hasOwnProperty.call(map, key)){
+      select.value = map[key] || "";
+      updatePositionJersey(select);
+    }
+  });
+  saveCourtToStorage();
+  renderBench();
+  updateCourtWarningsForSet();
+}
+
+function pushPointSnapshot(team, meta){
+  try{
+    const s = getSetScore(currentSet);
+    const snap = {
+      set: currentSet,
+      team: team,
+      meta: meta || {},
+      score: JSON.parse(JSON.stringify(s)),
+      proState: JSON.parse(JSON.stringify(proState)),
+      court: getCourtAssignments()
+    };
+    if(!pointUndoStack[currentSet]) pointUndoStack[currentSet] = [];
+    pointUndoStack[currentSet].push(snap);
+    // garde-fou
+    if(pointUndoStack[currentSet].length > 80) pointUndoStack[currentSet].shift();
+    savePointUndoStack();
+  }catch(e){}
+}
+
+function undoLastPoint(expected){
+  const stack = pointUndoStack[currentSet] || [];
+  if(!stack.length) return false;
+  const snap = stack[stack.length - 1];
+
+  if(expected){
+    if(expected.team && snap.team !== expected.team) return false;
+    if(expected.playerId && (snap.meta && snap.meta.playerId) !== expected.playerId) return false;
+    if(expected.cat && (snap.meta && snap.meta.cat) !== expected.cat) return false;
+  }
+
+  stack.pop();
+  savePointUndoStack();
+
+  // restore score
+  setScores[currentSet] = JSON.parse(JSON.stringify(snap.score || createEmptySetScore()));
+  // restore pro state (sans casser la référence)
+  Object.assign(proState, snap.proState || {});
+  saveProState();
+  saveSetScores();
+
+  // restore terrain
+  restoreCourtAssignments(snap.court || {});
+
+  renderProControlsUI();
+  renderSetScore();
+  renderDashboard();
+
+  beep(520, 120);
+  vib(40);
+  showTinyToast("Annulé ✅", 700);
+  return true;
+}
+
+function decrementRallyStat(playerId, cat, outcome, btn){
+  const s = getPlayerSetStats(playerId, currentSet);
+  const o = normalizeOutcome(outcome);
+
+  let keySuffix = "Plus";
+  if(o === "minus") keySuffix = "Minus";
+  if(o === "point") keySuffix = "Point";
+  if(o === "fault") keySuffix = "Fault";
+  const key = cat + keySuffix;
+
+  if((s[key] || 0) <= 0){
+    beep(300, 90);
+    vib(20);
+    showTinyToast("Rien à annuler", 650);
+    flashBtn(btn, "undo");
+    return;
+  }
+
+  // si c'est un point/faute, on tente d'annuler proprement le dernier point (rotation + libéro inclus)
+  if(o === "point" || o === "fault"){
+    const team = (o === "point") ? "nous" : "eux";
+    const ok = undoLastPoint({ team });
+    if(!ok){
+      // fallback : on décrémente le score sans rotation (mieux que rien)
+      const sc = getSetScore(currentSet);
+      if((sc[team] || 0) > 0) sc[team] -= 1;
+      saveSetScores();
+      renderSetScore();
+      showTinyToast("Score -1 (sans rotation)", 900);
+      beep(440, 110);
+      vib(40);
+    }
+  }
+
+  s[key] = Math.max(0, (s[key] || 0) - 1);
+
+  saveStats();
+  updateCourtWarningsForSet();
+  renderDashboard();
+
+  flashBtn(btn, "undo");
+  beep(660, 110);
+  vib(30);
+}
+/* ===== fin annulation + feedback ===== */
+
 
 function setCourtPosition(posKey, playerId) {
   const posDiv = document.querySelector('.court-pos[data-pos="' + posKey + '"]');
@@ -3382,17 +3958,45 @@ const chkRally = document.getElementById("chk-rally-bar");
 if (chkRally) chkRally.checked = !!proState.showRallyBar;
 applyRallyBarVisibility();
 
+
+  // Libéro remplace (cibles)
+  const t1 = document.getElementById("select-libero-target-1");
+  const t2 = document.getElementById("select-libero-target-2");
+  if (t1 || t2) {
+    // Remplit/rafraîchit les options (si effectif change)
+    fillLiberoTargetSelects();
+    if (t1) t1.value = (proState.liberoTargetIds && proState.liberoTargetIds[0]) ? proState.liberoTargetIds[0] : "";
+    if (t2) t2.value = (proState.liberoTargetIds && proState.liberoTargetIds[1]) ? proState.liberoTargetIds[1] : "";
+  }
+
   // Badge libéro actif
   const badge = document.getElementById("libero-active-badge");
   if (badge) {
-    badge.style.display = proState.liberoActive ? "inline-flex" : "none";
+    const on = !!proState.liberoActive;
+    badge.style.display = on ? "inline-flex" : "none";
+    if (on) {
+      const repId = proState.liberoReplacedId || "";
+      const rep = (players || []).find(p => p.id === repId);
+      const repLabel = rep ? ((rep.number ? "#" + rep.number + " " : "") + (rep.name || "")) : "";
+      badge.textContent = repLabel ? ("Libéro sur le terrain • remplace " + repLabel) : "Libéro sur le terrain";
+    } else {
+      badge.textContent = "Libéro sur le terrain";
+    }
   }
 }
 
 function applyRallyBarVisibility() {
   const bar = document.getElementById("rally-bar");
-  if (!bar) return;
-  bar.style.display = proState.showRallyBar ? "flex" : "none";
+  const on = !!proState.showRallyBar;
+
+  if (bar) bar.style.display = on ? "flex" : "none";
+
+  // Indicateur visuel (non bloquant)
+  const ind = document.getElementById("rally-indicator-fixed");
+  if (ind) {
+    ind.classList.toggle("on", on);
+    ind.setAttribute("aria-hidden", on ? "false" : "true");
+  }
 }
 
 
@@ -3422,20 +4026,81 @@ function fillLiberoSelect() {
   });
 }
 
+function fillLiberoTargetSelects() {
+  const sel1 = document.getElementById("select-libero-target-1");
+  const sel2 = document.getElementById("select-libero-target-2");
+  if (!sel1 && !sel2) return;
+
+  const ids = (proState.liberoTargetIds && Array.isArray(proState.liberoTargetIds))
+    ? proState.liberoTargetIds
+    : ["", ""];
+
+  const list = (players || [])
+    .filter(p => (p.inMatch !== false))
+    .slice()
+    .sort((a,b)=> (a.name||"").localeCompare(b.name||""));
+
+  function fillOne(sel, currentVal, otherVal) {
+    if (!sel) return;
+    sel.innerHTML = "";
+
+    const opt0 = document.createElement("option");
+    opt0.value = "";
+    opt0.textContent = "— Aucun remplacement";
+    sel.appendChild(opt0);
+
+    list.forEach(p => {
+      const o = document.createElement("option");
+      o.value = p.id;
+      o.textContent = (p.number ? "#" + p.number + " " : "") + (p.name || "") + (p.role ? " • " + p.role : "");
+      // On évite juste la confusion : le libéro ne remplace pas… lui-même
+      if (p.id === (proState.liberoId || "")) o.disabled = true;
+      // Évite les doublons (#1 et #2)
+      if (otherVal && p.id === otherVal) o.disabled = true;
+
+      if (p.id === currentVal) o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+
+  fillOne(sel1, ids[0] || "", ids[1] || "");
+  fillOne(sel2, ids[1] || "", ids[0] || "");
+}
+
 function initProControls() {
   fillLiberoSelect();
+  fillLiberoTargetSelects();
   renderProControlsUI();
 
   const bNous = document.getElementById("btn-serve-nous");
   const bEux  = document.getElementById("btn-serve-eux");
-  if (bNous) bNous.onclick = () => { proState.serveTeam = "nous"; saveProState(); renderProControlsUI(); };
-  if (bEux)  bEux.onclick  = () => { proState.serveTeam = "eux";  saveProState(); renderProControlsUI(); };
+  if (bNous) bNous.onclick = () => {
+    proState.serveTeam = "nous";
+    saveProState();
+    autoLiberoTick("serveTeamChange");
+    renderProControlsUI();
+  };
+  if (bEux)  bEux.onclick  = () => {
+    proState.serveTeam = "eux";
+    saveProState();
+    autoLiberoTick("serveTeamChange");
+    renderProControlsUI();
+  };
 
   const chkRot = document.getElementById("chk-auto-rotate");
-  if (chkRot) chkRot.onchange = () => { proState.autoRotate = !!chkRot.checked; saveProState(); renderProControlsUI(); };
+  if (chkRot) chkRot.onchange = () => {
+    proState.autoRotate = !!chkRot.checked;
+    saveProState();
+    renderProControlsUI();
+  };
 
   const chkLib = document.getElementById("chk-auto-libero");
-  if (chkLib) chkLib.onchange = () => { proState.autoLibero = !!chkLib.checked; saveProState(); renderProControlsUI(); };
+  if (chkLib) chkLib.onchange = () => {
+    proState.autoLibero = !!chkLib.checked;
+    saveProState();
+    autoLiberoTick("toggleAutoLibero");
+    renderProControlsUI();
+  };
 
   const selLib = document.getElementById("select-libero-pro");
   if (selLib) selLib.onchange = () => {
@@ -3443,72 +4108,186 @@ function initProControls() {
     const newLib = selLib.value || "";
     proState.liberoId = newLib;
 
-    // si un libéro était actif et qu'on change / désactive, on le sort proprement
+    // Si un libéro était sur le terrain et qu'on change/désactive : on ressort proprement
     if (proState.liberoActive && oldLib && oldLib !== newLib) {
       const pos = getPositionOfPlayer(oldLib);
-      if (pos && proState.liberoCentralId) {
-        setCourtPosition(pos, proState.liberoCentralId);
+      if (pos && proState.liberoReplacedId) {
+        setCourtPosition(pos, proState.liberoReplacedId);
       }
       proState.liberoActive = false;
-      proState.liberoCentralId = "";
+      proState.liberoReplacedId = "";
+      proState.liberoReplacedPos = "";
       refreshPositionSelects();
     }
 
     saveProState();
+    fillLiberoTargetSelects();
+    autoLiberoTick("liberoChanged");
+    renderProControlsUI();
+  };
+
+  const t1 = document.getElementById("select-libero-target-1");
+  if (t1) t1.onchange = () => {
+    proState.liberoTargetIds = proState.liberoTargetIds || ["",""];
+    proState.liberoTargetIds[0] = t1.value || "";
+    saveProState();
+    fillLiberoTargetSelects();
+    autoLiberoTick("target1Changed");
+    renderProControlsUI();
+  };
+
+  const t2 = document.getElementById("select-libero-target-2");
+  if (t2) t2.onchange = () => {
+    proState.liberoTargetIds = proState.liberoTargetIds || ["",""];
+    proState.liberoTargetIds[1] = t2.value || "";
+    saveProState();
+    fillLiberoTargetSelects();
+    autoLiberoTick("target2Changed");
     renderProControlsUI();
   };
 }
 
-function maybeAutoEnterLiberoOnServeLoss() {
-  if (!proState.autoLibero) return;
-  if (!proState.liberoId) return;
-  if (proState.liberoActive) return;
 
-  // Le serveur est en ARD (position 1)
-  const map = getCourtAssignments();
-  const serverId = map["ARD"] || "";
-  if (!serverId) return;
+function getLiberoTargetsResolved() {
+  // Cibles explicites
+  let targets = (proState.liberoTargetIds && Array.isArray(proState.liberoTargetIds))
+    ? proState.liberoTargetIds.filter(Boolean)
+    : [];
 
-  const server = (players || []).find(p => p.id === serverId);
-  if (!server) return;
+  // Fallback : tous les "centraux" détectés par rôle
+  if (!targets.length) {
+    targets = (players || [])
+      .filter(p => (p.inMatch !== false) && String(p.role || "").toLowerCase().includes("central"))
+      .map(p => p.id);
+  }
 
-  const role = String(server.role || "").toLowerCase();
-  const isCentral = role.includes("central");
-  if (!isCentral) return;
+  // Unique + pas le libéro
+  const libId = proState.liberoId || "";
+  const uniq = [];
+  targets.forEach(id => {
+    if (!id) return;
+    if (id === libId) return;
+    if (!uniq.includes(id)) uniq.push(id);
+  });
+  return uniq;
+}
 
-  // Swap : central -> libéro à la même position
-  setCourtPosition("ARD", proState.liberoId);
-  proState.liberoActive = true;
-  proState.liberoCentralId = serverId;
+function isFrontPos(pos) { return (pos === "AG" || pos === "AC" || pos === "AD"); }
+function isBackPos(pos)  { return (pos === "ARG" || pos === "ARC" || pos === "ARD"); }
+
+function forceLiberoOut() {
+  if (!proState.liberoActive) return;
+  const libId = proState.liberoId || "";
+  if (!libId) return;
+
+  const pos = getPositionOfPlayer(libId);
+  if (!pos) {
+    proState.liberoActive = false;
+    proState.liberoReplacedId = "";
+    proState.liberoReplacedPos = "";
+    return;
+  }
+
+  if (proState.liberoReplacedId) {
+    setCourtPosition(pos, proState.liberoReplacedId);
+  }
+  proState.liberoActive = false;
+  proState.liberoReplacedId = "";
+  proState.liberoReplacedPos = "";
 
   saveProState();
   refreshPositionSelects();
   renderProControlsUI();
+}
+
+function findLiberoEntryCandidate() {
+  const libId = proState.liberoId || "";
+  if (!libId) return null;
+
+  const targets = getLiberoTargetsResolved();
+  const backPositions = ["ARG","ARC","ARD"];
+
+  for (const targetId of targets) {
+    const pos = getPositionOfPlayer(targetId);
+    if (!pos) continue;
+    if (!backPositions.includes(pos)) continue;
+
+    // Par défaut, on évite de mettre le libéro en ARD quand NOUS sommes au service (ça ferait servir le libéro)
+    if (proState.serveTeam === "nous" && pos === "ARD") continue;
+
+    return { targetId, pos };
+  }
+  return null;
+}
+
+function autoLiberoTick(reason) {
+  // Sécurité : si l'app n'est pas prête
+  if (typeof getPositionOfPlayer !== "function" || typeof setCourtPosition !== "function") return;
+
+  // Si auto-libéro OFF => on sort le libéro s'il est actif
+  if (!proState.autoLibero) {
+    if (proState.liberoActive) forceLiberoOut();
+    return;
+  }
+
+  const libId = proState.liberoId || "";
+  if (!libId) {
+    if (proState.liberoActive) forceLiberoOut();
+    return;
+  }
+
+  // Si libéro actif : il doit sortir s'il arrive en ligne avant OU s'il se retrouve en ARD au moment où NOUS servons.
+  if (proState.liberoActive) {
+    const pos = getPositionOfPlayer(libId);
+    if (!pos) {
+      proState.liberoActive = false;
+      proState.liberoReplacedId = "";
+      proState.liberoReplacedPos = "";
+      saveProState();
+      renderProControlsUI();
+      return;
+    }
+
+    const mustExitFront = isFrontPos(pos);
+    const mustExitServe = (proState.serveTeam === "nous" && pos === "ARD");
+
+    if (mustExitFront || mustExitServe) {
+      forceLiberoOut();
+      return;
+    }
+
+    // Sinon : OK, il reste
+    proState.liberoReplacedPos = pos;
+    saveProState();
+    renderProControlsUI();
+    return;
+  }
+
+  // Libéro inactif : on peut le faire entrer si une cible est en ligne arrière
+  const cand = findLiberoEntryCandidate();
+  if (!cand) return;
+
+  setCourtPosition(cand.pos, libId);
+  proState.liberoActive = true;
+  proState.liberoReplacedId = cand.targetId;
+  proState.liberoReplacedPos = cand.pos;
+
+  saveProState();
+  refreshPositionSelects();
+  renderProControlsUI();
+}
+
+
+function maybeAutoEnterLiberoOnServeLoss() {
+  autoLiberoTick("serveLoss");
 }
 
 function maybeAutoExitLiberoIfFrontRow() {
-  if (!proState.liberoActive) return;
-  if (!proState.liberoId || !proState.liberoCentralId) return;
-
-  const pos = getPositionOfPlayer(proState.liberoId);
-  if (!pos) return;
-
-  // Ligne avant : AG / AC / AD
-  const isFront = (pos === "AG" || pos === "AC" || pos === "AD");
-  if (!isFront) return;
-
-  // Swap back : libéro -> banc, central -> terrain (à la place du libéro)
-  setCourtPosition(pos, proState.liberoCentralId);
-
-  proState.liberoActive = false;
-  proState.liberoCentralId = "";
-
-  saveProState();
-  refreshPositionSelects();
-  renderProControlsUI();
+  autoLiberoTick("postRotate");
 }
 
 function addPoint(team, meta) {
+  pushPointSnapshot(team, meta || {});
   const s = getSetScore(currentSet);
   const prevServe = proState.serveTeam;
 
@@ -3675,19 +4454,7 @@ function ensureProActionPads() {
         b.dataset.skill = s.cat;
         b.dataset.outcome = o.key;
         b.textContent = o.label;
-
-        b.addEventListener("click", (ev) => {
-          ev.stopPropagation();
-          const sel = posDiv.querySelector(".pos-select");
-          const playerId = sel ? sel.value : "";
-          if (!playerId) {
-            alert("Choisis d’abord un·e joueur·euse sur ce poste.");
-            return;
-          }
-          addRallyStat(playerId, s.cat, o.key);
-        });
-
-        row.appendChild(b);
+row.appendChild(b);
       });
 
       pad.appendChild(row);
@@ -3695,39 +4462,118 @@ function ensureProActionPads() {
 
     posDiv.appendChild(pad);
   });
+
+  // Re-wire (click + appui long) après reconstruction du pad
+  try { wireProButtons(); } catch(e) {}
 }
 
-// === Pro: clic sur les boutons directement dans les tuiles (délégation d'événements) ===
+// === Pro: boutons dans les tuiles (feedback + appui long 2s) ===
 let __proPadDelegationDone = false;
-function wireProActionPadDelegation(){
-  if (__proPadDelegationDone) return;
+const __proButtonsWired = new WeakSet();
+
+function __proBtnContext(btn){
+  const posDiv = btn.closest(".court-pos");
+  if (!posDiv) return null;
+  const sel = posDiv.querySelector(".pos-select");
+  const playerId = sel ? (sel.value || "") : "";
+  if (!playerId) return { error: "Choisis d’abord un·e joueur·euse sur ce poste." };
+  return { playerId, skill: btn.dataset.skill, outcome: btn.dataset.outcome };
+}
+
+function wireProButtons(){
   const grid = document.getElementById("court-grid");
   if (!grid) return;
 
-  grid.addEventListener("click", (ev) => {
-    const btn = ev.target && ev.target.closest ? ev.target.closest(".pro-out-btn") : null;
-    if (!btn) return;
+  const buttons = grid.querySelectorAll(".pro-out-btn");
+  buttons.forEach((btn) => {
+    if (__proButtonsWired.has(btn)) return;
+    __proButtonsWired.add(btn);
 
-    ev.preventDefault();
-    ev.stopPropagation();
+    let timer = null;
 
-    const posDiv = btn.closest(".court-pos");
-    if (!posDiv) return;
-
-    const sel = posDiv.querySelector(".pos-select");
-    const playerId = sel ? (sel.value || "") : "";
-    if (!playerId) {
-      alert("Choisis d’abord un·e joueur·euse sur ce poste.");
-      return;
+    function clearPress(){
+      if (timer) { clearTimeout(timer); timer = null; }
+      btn.classList.remove("pressed");
     }
 
-    const skill = btn.dataset.skill;
-    const outcome = btn.dataset.outcome;
-    addRallyStat(playerId, skill, outcome);
-  });
+    function startPress(ev){
+      // ignore clic droit / boutons autres
+      if (ev && (ev.type === "mousedown" || ev.type === "pointerdown") && ev.button != null && ev.button !== 0) return;
+      // évite double-déclenchement (PointerEvent + MouseEvent)
+      if (ev && ev.type === "mousedown" && window.PointerEvent) return;
+      if (ev && ev.type === "touchstart" && window.PointerEvent) return;
+      btn.classList.add("pressed");
+      if (timer) { clearTimeout(timer); timer = null; }
 
+      timer = setTimeout(() => {
+        timer = null;
+        btn.dataset.lpConsumed = "1";
+        const ctx = __proBtnContext(btn);
+        if (ctx && ctx.error) { showTinyToast(ctx.error, 1100); beep(300, 120); vib(40); clearPress(); return; }
+        if (!ctx) { clearPress(); return; }
+
+        // décrémente 1 action (bip + highlight gérés dedans)
+        decrementRallyStat(ctx.playerId, ctx.skill, ctx.outcome, btn);
+        clearPress();
+      }, 2000);
+    }
+
+    // Pointer events (mobile + desktop)
+    btn.addEventListener("pointerdown", startPress, { passive: true });
+    btn.addEventListener("pointerup", clearPress, { passive: true });
+    btn.addEventListener("pointercancel", clearPress, { passive: true });
+    btn.addEventListener("pointerleave", clearPress, { passive: true });
+
+    // Fallback
+    btn.addEventListener("mousedown", startPress);
+    btn.addEventListener("mouseup", clearPress);
+    btn.addEventListener("mouseleave", clearPress);
+
+    btn.addEventListener("touchstart", startPress, { passive: true });
+    btn.addEventListener("touchend", clearPress, { passive: true });
+    btn.addEventListener("touchcancel", clearPress, { passive: true });
+
+    // Click normal => ajoute l’action + flash (capture : évite les handlers hérités)
+    btn.addEventListener("click", (ev) => {
+      // Si un long-press vient de déclencher l’annulation, on ignore le click
+      if (btn.dataset.lpConsumed === "1") {
+        btn.dataset.lpConsumed = "";
+        ev.preventDefault();
+        ev.stopImmediatePropagation();
+        ev.stopPropagation();
+        clearPress();
+        return;
+      }
+
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      ev.stopPropagation();
+
+      const ctx = __proBtnContext(btn);
+      if (ctx && ctx.error) {
+        showTinyToast(ctx.error, 1100);
+        beep(300, 120);
+        vib(40);
+        clearPress();
+        return;
+      }
+      if (!ctx) { clearPress(); return; }
+
+      addRallyStat(ctx.playerId, ctx.skill, ctx.outcome);
+      flashBtn(btn, "tap");
+      clearPress();
+    }, true);
+  });
+}
+
+function wireProActionPadDelegation(){
+  // On garde le nom historique, mais on wire maintenant directement chaque bouton (plus fiable).
+  if (__proPadDelegationDone) return;
+  wireProButtons();
   __proPadDelegationDone = true;
 }
+
+// =====================================================================
 // =====================================================================
 
 
@@ -3991,6 +4837,11 @@ listEl.innerHTML = "";
         o[cat + "Plus"] = 0;
         o[cat + "Minus"] = 0;
       });
+      // Détail des fautes adverses directes (point pour nous)
+      o.errService = 0;
+      o.errAttaque = 0;
+      o.errBloc = 0;
+      o.errAutre = 0;
       return o;
     }
     function getOpponentSetStats(setNumber) {
@@ -4657,6 +5508,14 @@ function applyCourtRotation(rotated) {
       pos.classList.add("danger-delta");
     }
   });
+  // MAJ des contrôles pro (listes libéro + cibles)
+  if (typeof fillLiberoSelect === "function") fillLiberoSelect();
+  if (typeof fillLiberoTargetSelects === "function") fillLiberoTargetSelects();
+  if (typeof renderProControlsUI === "function") renderProControlsUI();
+
+  // Auto-libéro peut dépendre de la rotation / des postes
+  if (typeof autoLiberoTick === "function") autoLiberoTick("refreshPositionSelects");
+
 }
 
 
@@ -4769,6 +5628,9 @@ function applyCourtRotation(rotated) {
       if (valEux) {
         valEux.textContent = s.eux;
       }
+
+      renderOpponentPointPanel();
+      renderOpponentFaultPanel();
 
       renderTimeouts();
     }
@@ -4956,6 +5818,215 @@ function applyCourtRotation(rotated) {
         }
       });
     }
+
+    
+    /* --------- Point adverse : panneau rapide (niveau 1 + niveau 2) ---------- */
+    function renderOpponentPointPanel() {
+      const panel = document.getElementById("opp-point-panel");
+      if (!panel) return;
+
+      const teamEl = document.getElementById("opppt-team");
+      const valEl  = document.getElementById("opppt-score-val");
+      const s = getSetScore(currentSet);
+
+      if (teamEl) teamEl.textContent = (teamNames && teamNames.opp) ? (teamNames.opp || "Adversaire") : "Adversaire";
+      if (valEl)  valEl.textContent  = String(s.eux || 0);
+    }
+
+    function incOpponentTaggedPoint(tag) {
+      // 1) Score match
+      addPoint("eux", { kind: "oppPoint", level: 2, tag: tag || "autre" });
+
+      // 2) Stats adverses (si dispo : servicePlus / blocPlus / pointsPlus)
+      const st = getOpponentSetStats(currentSet);
+      let cat = "points";
+      if (tag === "service") cat = "service";
+      if (tag === "bloc") cat = "bloc";
+
+      const keyPlus = cat + "Plus";
+      st[keyPlus] = (st[keyPlus] || 0) + 1;
+      saveOpponentStats();
+      renderOpponentStats();
+
+      // UI
+      renderOpponentPointPanel();
+      renderOpponentFaultPanel();
+      renderDashboard();
+    }
+
+    /* --------- Fautes adverses directes : panneau rapide (point pour nous) ---------- */
+    function renderOpponentFaultPanel() {
+      const panel = document.getElementById("opp-fault-panel");
+      if (!panel) return;
+
+      const teamEl = document.getElementById("oppft-team");
+      const valEl  = document.getElementById("oppft-score-val");
+      const s = getSetScore(currentSet);
+
+      if (teamEl) teamEl.textContent = (teamNames && teamNames.us) ? (teamNames.us || "Nous") : "Nous";
+      if (valEl)  valEl.textContent  = String(s.nous || 0);
+
+      const st = getOpponentSetStats(currentSet);
+      const map = {
+        service: st.errService || 0,
+        attaque: st.errAttaque || 0,
+        bloc: st.errBloc || 0,
+        autre: st.errAutre || 0
+      };
+      panel.querySelectorAll("[data-oppft-count]").forEach(el => {
+        const k = el.getAttribute("data-oppft-count");
+        el.textContent = String(map[k] ?? 0);
+      });
+    }
+
+    function incOpponentDirectFault(tag) {
+      const t = (tag || "autre");
+
+      // 1) Score match (point pour nous) + rotation/serve auto si besoin
+      addPoint("nous", { kind: "oppFault", level: 2, tag: t });
+
+      // 2) Stats adverses : détail + total
+      const st = getOpponentSetStats(currentSet);
+
+      if (t === "service") {
+        st.errService = (st.errService || 0) + 1;
+        // On note aussi la faute au service dans "Services : fautes"
+        st.serviceMinus = (st.serviceMinus || 0) + 1;
+      } else if (t === "attaque") {
+        st.errAttaque = (st.errAttaque || 0) + 1;
+        st.cadeauxPlus = (st.cadeauxPlus || 0) + 1;
+      } else if (t === "bloc") {
+        st.errBloc = (st.errBloc || 0) + 1;
+        st.cadeauxPlus = (st.cadeauxPlus || 0) + 1;
+      } else {
+        st.errAutre = (st.errAutre || 0) + 1;
+        st.cadeauxPlus = (st.cadeauxPlus || 0) + 1;
+      }
+
+      saveOpponentStats();
+      renderOpponentStats();
+      renderOpponentFaultPanel();
+      renderDashboard();
+    }
+
+    function initOpponentFaultPanel() {
+      const panel = document.getElementById("opp-fault-panel");
+      if (!panel) return;
+
+      panel.addEventListener("click", function(e) {
+        const btn = e.target.closest("[data-oppft]");
+        const tagBtn = e.target.closest("[data-oppft-tag]");
+        if (!btn && !tagBtn) return;
+
+        // Score neutre pour nous (+ / -) — correction rapide
+        if (btn) {
+          const kind = btn.dataset.oppft;
+
+          if (kind === "plus") {
+            addPoint("nous", { kind: "oppFault", level: 1, tag: "neutre" });
+            renderOpponentFaultPanel();
+            return;
+          }
+
+          if (kind === "minus") {
+            // Correction simple (sans rollback complet du service/rotation)
+            const s = getSetScore(currentSet);
+            s.nous = Math.max(0, (s.nous || 0) - 1);
+            saveSetScores();
+            renderSetScore();
+            renderOpponentFaultPanel();
+            renderDashboard();
+            return;
+          }
+        }
+
+        // Tag de la faute adverse => point pour nous + détail
+        if (tagBtn) {
+          incOpponentDirectFault(tagBtn.dataset.oppftTag);
+        }
+      });
+
+      renderOpponentFaultPanel();
+    }
+
+
+
+    function initOpponentPointPanel() {
+      const panel = document.getElementById("opp-point-panel");
+      if (!panel) return;
+
+      panel.addEventListener("click", function(e) {
+        const btn = e.target.closest("[data-opppt]");
+        const tagBtn = e.target.closest("[data-opppt-tag]");
+        if (!btn && !tagBtn) return;
+
+        // Niveau 1 : score neutre adverse (+ / -)
+        if (btn) {
+          const kind = btn.dataset.opppt;
+
+          if (kind === "plus") {
+            addPoint("eux", { kind: "oppPoint", level: 1, tag: "neutre" });
+            // (niveau 1 : volontairement pas de stat adverse associée)
+            renderOpponentPointPanel();
+      renderOpponentFaultPanel();
+            return;
+          }
+
+          if (kind === "minus") {
+            // Correction simple (sans rollback complet du service/rotation)
+            const s = getSetScore(currentSet);
+            s.eux = Math.max(0, (s.eux || 0) - 1);
+            saveSetScores();
+            renderSetScore();
+            renderOpponentPointPanel();
+      renderOpponentFaultPanel();
+            renderDashboard();
+            return;
+          }
+        }
+
+        // Niveau 2 : point adverse taggé
+        if (tagBtn) {
+          incOpponentTaggedPoint(tagBtn.dataset.oppptTag);
+        }
+      });
+
+      // premier render
+      renderOpponentPointPanel();
+      renderOpponentFaultPanel();
+    }
+
+
+function initOpponentPanelsToggle() {
+  const btn = document.getElementById("btn-toggle-opp-panels");
+  const wrap = document.getElementById("opp-panels-wrap");
+  if (!btn || !wrap) return;
+
+  const KEY = "s2m_pro6x6_opp_panels_collapsed";
+  let collapsed = localStorage.getItem(KEY);
+  // par défaut: plié pour ne pas surcharger l'écran match
+  if (collapsed === null) collapsed = "1";
+
+  function apply() {
+    const isCollapsed = collapsed === "1";
+    wrap.classList.toggle("is-collapsed", isCollapsed);
+    wrap.setAttribute("aria-hidden", isCollapsed ? "true" : "false");
+    btn.setAttribute("aria-expanded", isCollapsed ? "false" : "true");
+    btn.textContent = isCollapsed ? "⚡ Détails" : "⚡ Masquer";
+    btn.classList.toggle("is-open", !isCollapsed);
+  }
+
+  apply();
+
+  btn.addEventListener("click", () => {
+    collapsed = (collapsed === "1") ? "0" : "1";
+    localStorage.setItem(KEY, collapsed);
+    apply();
+  });
+}
+
+
+
 
     /* --------- vue stats joueur·euse ---------- */
     function openPlayerStats(playerId) {
@@ -6450,10 +7521,13 @@ if (btnValidateRoster) {
       renderDashboard();
     });
 
-    document.getElementById("btn-back-from-dashboard").onclick = () => {
-      document.getElementById("dashboard-container").style.display = "none";
-      document.getElementById("main-view").style.display = "block";
-    };
+    const btnBackDash = document.getElementById("btn-back-from-dashboard");
+    if (btnBackDash) {
+      btnBackDash.onclick = () => {
+        document.getElementById("dashboard-container").style.display = "none";
+        document.getElementById("main-view").style.display = "block";
+      };
+    }
 
   // Boutons Tableau de bord (export)
   const btnDashPrint = document.getElementById("btn-dashboard-print");
@@ -6599,6 +7673,7 @@ loadPlayers();
 
 // ===== Pro (match pro) : état + contrôles + actions sur tuiles =====
 loadProState();
+loadPointUndoStack();
 fillLiberoSelect();
 initProControls();       // listeners
 initProActionOverlay();  // legacy overlay (garde)
@@ -6615,6 +7690,9 @@ wireProActionPadDelegation();
   initStatsControls();
   initScoreControls();
   initOpponentControls();
+  initOpponentPointPanel();
+  initOpponentFaultPanel();
+  initOpponentPanelsToggle();
   initHistoryEvents();
   setCurrentSet(1);
   updateTeamNamesUI();
@@ -7047,6 +8125,18 @@ function buildFunkyPrintHTML(title, metaLine, text) {
       <pre>${safeText}</pre>
     </div>
   </div>
+
+  <!-- Floating back-to-court buttons (anchored, no scroll needed) -->
+  <div id="floating-back-left" class="floating-back-wrap left floating-back-hidden" aria-hidden="true">
+    <button type="button" class="floating-back-btn" id="btn-float-back-left" aria-label="Retour au terrain">↩ Terrain</button>
+  </div>
+  <div id="floating-back-right" class="floating-back-wrap right floating-back-hidden" aria-hidden="true">
+    <button type="button" class="floating-back-btn" id="btn-float-back-right" aria-label="Retour au terrain">Terrain ↩</button>
+  </div>
+
+
+  <div id="rally-indicator-fixed" aria-hidden="true"><span class="dot"></span><span class="txt">🎯 Rallye ON</span></div>
+
 </body>
 </html>`;
 }
@@ -7277,6 +8367,87 @@ document.addEventListener("click", (e) => {
   }
 }, true);
 
+
+/* === Floating Back-to-court (anchored) === */
+(function(){
+  function qs(id){ return document.getElementById(id); }
+  function isVisible(el){
+    if (!el) return false;
+    const cs = window.getComputedStyle(el);
+    return cs && cs.display !== "none" && cs.visibility !== "hidden" && cs.opacity !== "0";
+  }
+
+  function goToCourt(){
+    // Hide all "pages" and show the terrain
+    const main = qs("main-view");
+    const pages = ["stats-container","dashboard-container","history-container","help-container"];
+    pages.forEach(pid => { const el = qs(pid); if(el) el.style.display = "none"; });
+
+    if (main) main.style.display = "block";
+
+    // If roster overlay exists, keep it as-is (user choice).
+    // Smooth re-focus near terrain title when possible
+    try{
+      const anchor = qs("main-view");
+      if (anchor) anchor.scrollIntoView({behavior:"smooth", block:"start"});
+      else window.scrollTo({top:0, behavior:"smooth"});
+    }catch(e){
+      window.scrollTo(0,0);
+    }
+  }
+
+  function updateFloating(){
+    const left = qs("floating-back-left");
+    const right = qs("floating-back-right");
+    if (!left || !right) return;
+
+    const auxOpen =
+      isVisible(qs("stats-container")) ||
+      isVisible(qs("dashboard-container")) ||
+      isVisible(qs("history-container")) ||
+      isVisible(qs("help-container"));
+
+    // show only when you're NOT on the terrain (i.e., some other page is open)
+    if (auxOpen){
+      left.classList.remove("floating-back-hidden");
+      right.classList.remove("floating-back-hidden");
+      left.setAttribute("aria-hidden","false");
+      right.setAttribute("aria-hidden","false");
+    } else {
+      left.classList.add("floating-back-hidden");
+      right.classList.add("floating-back-hidden");
+      left.setAttribute("aria-hidden","true");
+      right.setAttribute("aria-hidden","true");
+    }
+  }
+
+  function bind(){
+    const bl = qs("btn-float-back-left");
+    const br = qs("btn-float-back-right");
+    if (bl) bl.addEventListener("click", goToCourt);
+    if (br) br.addEventListener("click", goToCourt);
+
+    // keep it always correct even if other code toggles views
+    updateFloating();
+    setInterval(updateFloating, 250);
+
+    // Also update right after common nav/back buttons
+    ["btn-back-from-dashboard","btn-back-from-history","btn-back-from-history-bottom","btn-back-from-help"].forEach(id=>{
+      const b = qs(id);
+      if (b) b.addEventListener("click", ()=>setTimeout(updateFloating, 30));
+    });
+
+    // If there are nav buttons that open pages, hook them too
+    ["btn-dashboard","btn-history","btn-help"].forEach(id=>{
+      const b = qs(id);
+      if (b) b.addEventListener("click", ()=>setTimeout(updateFloating, 30));
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bind);
+  else bind();
+})();
+
 </script>
 
   <!-- OVERLAY RALLYE : LISTE DES JOUEUSES SUR LE TERRAIN -->
@@ -7335,6 +8506,16 @@ document.addEventListener("click", (e) => {
       </p>
     </div>
   </div>
+
+
+  <!-- Floating back-to-court buttons (anchored, no scroll needed) -->
+  <div id="floating-back-left" class="floating-back-wrap left floating-back-hidden" aria-hidden="true">
+    <button type="button" class="floating-back-btn" id="btn-float-back-left" aria-label="Retour au terrain">↩ Terrain</button>
+  </div>
+  <div id="floating-back-right" class="floating-back-wrap right floating-back-hidden" aria-hidden="true">
+    <button type="button" class="floating-back-btn" id="btn-float-back-right" aria-label="Retour au terrain">Terrain ↩</button>
+  </div>
+
 
 </body>
 </html>
