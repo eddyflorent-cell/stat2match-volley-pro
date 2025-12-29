@@ -3029,11 +3029,30 @@ diag-head{
 </style>
 </head>
 <body>
+<!-- ===================================================== -->
+<!-- STAT2MATCH 6x6 PRO — STRUCTURE (lisible / maintenable) -->
+<!-- 1. EN-TÊTE & STYLES GLOBAUX : <head> -->
+<!-- 2. BARRE D'ACTIONS PRINCIPALE (TOP) : navigation -->
+<!-- 3. ÉQUIPE & EFFECTIF : formulaire + liste + import/export -->
+<!-- 4. TERRAIN 6x6 + BANC : positions + banc + rotation -->
+<!-- 5. SCORE / SETS / TEMPS-MORTS : score nous/eux -->
+<!-- 6. BANDEAU RALLYE : mode rallye + raccourcis -->
+<!-- 7. STATS JOUEUR : fiche individuelle + rapport -->
+<!-- 8. STATS ADVERSAIRES : points / fautes / tags -->
+<!-- 9. DASHBOARD COACH : lecture set + match + distinctions -->
+<!-- 10. HISTORIQUE : matchs sauvegardés + partage -->
+<!-- 11. AIDE / TUTORIEL : onboarding progressif -->
+<!-- 12. MATCH I/O : export/import JSON (match / saison) -->
+<!-- ===================================================== -->
+
   <!-- VUE PRINCIPALE -->
  <div class="container" id="main-view">
   <h1 id="app-title">Stats de match pro – 6x6</h1>
 
-  <div id="team-name-bar">
+  <!-- ===================================== -->
+<!-- 2. BARRE D'ACTIONS PRINCIPALE (TOP) -->
+<!-- ===================================== -->
+<div id="team-name-bar">
     <input id="team-name-input" type="text" placeholder="Nom de notre équipe" />
     <input id="opponent-name-input" type="text" placeholder="Nom de l'adversaire" />
   </div>
@@ -3047,7 +3066,10 @@ diag-head{
  
 
     <!-- EFFECTIF -->
-    <section id="roster" style="display:none;">
+    <!-- ===================================== -->
+<!-- 3. BLOC ÉQUIPE & EFFECTIF JOUEURS -->
+<!-- ===================================== -->
+<section id="roster" style="display:none;">
       <h2>Effectif</h2>
       <form id="player-form">
         <input type="hidden" id="player-id" />
@@ -3105,6 +3127,9 @@ diag-head{
 
     <!-- TERRAIN 6x6 -->
 <!-- TERRAIN 6x6 -->
+<!-- ===================================== -->
+<!-- 4. TERRAIN 6x6 + BANC -->
+<!-- ===================================== -->
 <section id="court" class="no-select">
   <h2>Terrain (6 joueur·euses) 🎛️</h2>
 
@@ -3527,7 +3552,10 @@ diag-head{
       </div>
 
       <!-- BANDEAU RALLYE -->
-      <div id="rally-bar" style="display:none;">
+      <!-- ===================================== -->
+<!-- 6. BANDEAU RALLYE -->
+<!-- ===================================== -->
+<div id="rally-bar" style="display:none;">
         <div class="rally-group" data-skill="service">
           <span class="rally-label">Service</span>
           <button class="rally-btn" data-skill="service" data-outcome="plus">+</button>
@@ -3646,7 +3674,10 @@ diag-head{
         <button type="button" id="btn-toggle-opp-panels" class="btn chip-btn opp-toggle" aria-expanded="false" aria-controls="opp-panels-wrap" title="Afficher / masquer le panneau points & fautes adverses">⚡ Détails</button>
       </div>
 
-      <div id="opp-panels-wrap" class="opp-panels-wrap is-collapsed" aria-hidden="true">
+      <!-- ===================================== -->
+<!-- 8. VUE STATS ADVERSAIRES -->
+<!-- ===================================== -->
+<div id="opp-panels-wrap" class="opp-panels-wrap is-collapsed" aria-hidden="true">
 
 
       <div id="opp-point-panel" class="opp-point-panel">
@@ -3754,7 +3785,10 @@ diag-head{
   </div>
   <!-- FICHE STATS JOUEUSE -->
   <div class="container" id="stats-container" style="display:none;">
-    <section id="stats-view" class="no-select">
+    <!-- ===================================== -->
+<!-- 7. VUE STATS JOUEUR (PLAYER STATS VIEW) -->
+<!-- ===================================== -->
+<section id="stats-view" class="no-select">
 <p style="margin:10px 0 0; opacity:.95;">🧲 <b>Nouveau :</b> utilise les boutons flottants <b>Terrain ↩</b> (gauche + droite) : ils restent visibles même quand tu scroll, sur Stats / Tableau de bord / Historique / Tutoriel.</p>
       <h2 id="stats-player-title">Statistiques :</h2>
 
@@ -3946,7 +3980,10 @@ diag-head{
 
 
    <!-- TABLEAU DE BORD -->
-  <div class="container" id="dashboard-container" style="display:none;">
+  <!-- ===================================== -->
+<!-- 9. DASHBOARD COACH -->
+<!-- ===================================== -->
+<div class="container" id="dashboard-container" style="display:none;">
     <section id="dashboard" class="no-select">
 <h2>Tableau de bord</h2>
       <div id="dash-actions">
@@ -3962,7 +3999,10 @@ diag-head{
       </div>
 
       <!-- Match I/O (export / import JSON) -->
-      <div id="matchio-overlay" style="display:none;">
+      <!-- ===================================== -->
+<!-- 12. MATCH IO (EXPORT / IMPORT) -->
+<!-- ===================================== -->
+<div id="matchio-overlay" style="display:none;">
         <div id="matchio-panel" role="dialog" aria-modal="true" aria-label="Sauvegarde et import de match">
           <div class="matchio-head" id="matchio-drag-handle">
             <div>
@@ -4133,7 +4173,10 @@ diag-head{
   </div>
 
   <!-- HISTORIQUE -->
-  <div class="container" id="history-container" style="display:none;">
+  <!-- ===================================== -->
+<!-- 10. HISTORIQUE DES MATCHS -->
+<!-- ===================================== -->
+<div class="container" id="history-container" style="display:none;">
     <section id="history" class="no-select">
 <h2>Historique des matchs</h2>
 
@@ -4141,7 +4184,10 @@ diag-head{
 </section>
   </div>
     <!-- TUTORIEL / AIDE -->
-  <div class="container" id="help-container" style="display:none;">
+  <!-- ===================================== -->
+<!-- 11. AIDE / TUTORIEL -->
+<!-- ===================================== -->
+<div class="container" id="help-container" style="display:none;">
     
 <section id="help" class="no-select help-page funky-help">
   <button class="help-back" id="btn-back-from-help">← Retour au terrain</button>
@@ -4323,6 +4369,19 @@ diag-head{
  </div>
     </section>
   </div>
+
+<!-- ===================================== -->
+<!-- 13→21. SCRIPTS JS (regroupés par blocs) -->
+<!-- 13. CONFIG & CONSTANTES -->
+<!-- 14. GESTION JOUEURS & EFFECTIF -->
+<!-- 15. TERRAIN & ROTATION -->
+<!-- 16. SCORE / SETS / TEMPS-MORTS -->
+<!-- 17. STATS JOUEURS & RALLYE -->
+<!-- 18. STATS ADVERSAIRES -->
+<!-- 19. DASHBOARD & DIAGNOSTICS -->
+<!-- 20. HISTORIQUE & RAPPORTS / IMPRESSION -->
+<!-- 21. MATCH I/O & BOOT APP -->
+<!-- ===================================== -->
 <script>
 /* === BOOT DIAG (visible) === */
 (function(){
